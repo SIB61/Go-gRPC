@@ -22,7 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateAccount(ctx context.Context, in *AccountDetails, opts ...grpc.CallOption) (*Status, error)
+	CreateAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	Logout(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
 }
 
 type userServiceClient struct {
@@ -33,9 +36,36 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateAccount(ctx context.Context, in *AccountDetails, opts ...grpc.CallOption) (*Status, error) {
+func (c *userServiceClient) CreateAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
 	out := new(Status)
 	err := c.cc.Invoke(ctx, "/main.UserService/CreateAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/main.UserService/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) Logout(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/main.UserService/Logout", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
+	out := new(Status)
+	err := c.cc.Invoke(ctx, "/main.UserService/DeleteAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +76,10 @@ func (c *userServiceClient) CreateAccount(ctx context.Context, in *AccountDetail
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateAccount(context.Context, *AccountDetails) (*Status, error)
+	CreateAccount(context.Context, *User) (*Status, error)
+	Login(context.Context, *User) (*Status, error)
+	Logout(context.Context, *User) (*Status, error)
+	DeleteAccount(context.Context, *User) (*Status, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -54,8 +87,17 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateAccount(context.Context, *AccountDetails) (*Status, error) {
+func (UnimplementedUserServiceServer) CreateAccount(context.Context, *User) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
+}
+func (UnimplementedUserServiceServer) Login(context.Context, *User) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedUserServiceServer) Logout(context.Context, *User) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
+}
+func (UnimplementedUserServiceServer) DeleteAccount(context.Context, *User) (*Status, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -71,7 +113,7 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 }
 
 func _UserService_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AccountDetails)
+	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -83,7 +125,61 @@ func _UserService_CreateAccount_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: "/main.UserService/CreateAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateAccount(ctx, req.(*AccountDetails))
+		return srv.(UserServiceServer).CreateAccount(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/main.UserService/Login",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Login(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/main.UserService/Logout",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).Logout(ctx, req.(*User))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_DeleteAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(User)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).DeleteAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/main.UserService/DeleteAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).DeleteAccount(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -98,6 +194,18 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateAccount",
 			Handler:    _UserService_CreateAccount_Handler,
+		},
+		{
+			MethodName: "Login",
+			Handler:    _UserService_Login_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _UserService_Logout_Handler,
+		},
+		{
+			MethodName: "DeleteAccount",
+			Handler:    _UserService_DeleteAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

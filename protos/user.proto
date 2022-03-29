@@ -2,23 +2,21 @@ syntax ="proto3";
 package main;
 option go_package = "/gen";
 
-message AccountDetails{
-    string Email = 1;
-    string Password = 2;
-    optional UserDetails UserDetails = 3;
-} 
-message UserDetails{
-    string Name=1;
-    string age=2;
-    string institution=3;
+message User{
+    string userName=1;
+    string password=2;
 }
 enum StatusType{
     SUCCESS=0;
     FAILED=1;
 }
 message Status{
-   StatusType Status=1;
+   StatusType status=1;
+   optional string body=2;
 }
 service UserService{
-    rpc CreateAccount(AccountDetails) returns (Status);
+    rpc CreateAccount(User) returns (Status);
+    rpc Login(User) returns (Status);
+    rpc Logout(User) returns (Status);
+    rpc DeleteAccount(User) returns (Status);
 }
