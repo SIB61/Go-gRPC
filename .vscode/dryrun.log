@@ -1,0 +1,5 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory '/home/sabit/GoLang/Go-gRPC'
+go run "/home/sabit/GoLang/Go-gRPC/server/."
+make: Leaving directory '/home/sabit/GoLang/Go-gRPC'
+ 

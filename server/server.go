@@ -1,26 +1,40 @@
 package main
 
 import (
-	"flag"
-	"github.com/SIB61/Go-gRPC/gen"
-	"google.golang.org/grpc"
+	"context"
 	"log"
-	"net"
+//	"strings"
+
+	"github.com/SIB61/Go-gRPC/gen"
+	"gorm.io/gorm"
 )
-func main() {
-	flag.Parse()
-	lis, err := net.Listen("tcp", "localhost:9000")
-	if err != nil {
-		log.Fatal(err)
+
+type Server struct {
+	db *gorm.DB
+	gen.UnimplementedUserServiceServer
+}
+
+var Users []*gen.User
+
+func (s *Server) CreateAccount(ctx context.Context, user *gen.User) (*gen.Status, error) {
+	e:=s.db.Create(&gen.User{Email: user.Email,Password: user.Password}).Error
+	if e!=nil{
+		log.Fatal("new user created with email: "+user.Email)
+		return &gen.Status{Status: gen.StatusType_SUCCESS}, nil
+	}else{
+		log.Fatal("falied")
+		return &gen.Status{Status: gen.StatusType_FAILED}, e
 	}
+}
 
-	grpcServer := grpc.NewServer()
+func (s *Server) Login(ctx context.Context, user *gen.User) (*gen.Status, error) {
+	return &gen.Status{}, nil
+}
 
-	gen.RegisterUserServiceServer(grpcServer,&Server{})
+func (s *Server) Logout(ctx context.Context, user *gen.User) (*gen.Status, error) {
+	return &gen.Status{}, nil
+}
 
-	log.Println("listening at ", lis.Addr())
-
-	if err := grpcServer.Serve(lis); err != nil {
-		log.Fatal("grpc error", err)
-	}
+func (s *Server) DeleteAccount(ctx context.Context, user *gen.User) (*gen.Status, error) {
+	return &gen.Status{}, nil
 }

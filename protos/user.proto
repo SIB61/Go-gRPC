@@ -3,8 +3,9 @@ package main;
 option go_package = "/gen";
 
 message User{
-    string userName=1;
-    string password=2;
+    int32 ID=1;
+    string email=2;
+    string password=3;
 }
 enum StatusType{
     SUCCESS=0;
