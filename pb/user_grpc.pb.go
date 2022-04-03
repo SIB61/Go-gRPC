@@ -4,7 +4,7 @@
 // - protoc             v3.19.4
 // source: protos/user.proto
 
-package gen
+package pb
 
 import (
 	context "context"
@@ -22,10 +22,9 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	CreateAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
-	Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
-	Logout(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
-	DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error)
+	Register(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error)
+	Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error)
+	DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error)
 }
 
 type userServiceClient struct {
@@ -36,17 +35,17 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) CreateAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
-	err := c.cc.Invoke(ctx, "/main.UserService/CreateAccount", in, out, opts...)
+func (c *userServiceClient) Register(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/main.UserService/Register", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *userServiceClient) Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
+func (c *userServiceClient) Login(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/main.UserService/Login", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -54,17 +53,8 @@ func (c *userServiceClient) Login(ctx context.Context, in *User, opts ...grpc.Ca
 	return out, nil
 }
 
-func (c *userServiceClient) Logout(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
-	err := c.cc.Invoke(ctx, "/main.UserService/Logout", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userServiceClient) DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Status, error) {
-	out := new(Status)
+func (c *userServiceClient) DeleteAccount(ctx context.Context, in *User, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/main.UserService/DeleteAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,10 +66,9 @@ func (c *userServiceClient) DeleteAccount(ctx context.Context, in *User, opts ..
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	CreateAccount(context.Context, *User) (*Status, error)
-	Login(context.Context, *User) (*Status, error)
-	Logout(context.Context, *User) (*Status, error)
-	DeleteAccount(context.Context, *User) (*Status, error)
+	Register(context.Context, *User) (*Response, error)
+	Login(context.Context, *User) (*Response, error)
+	DeleteAccount(context.Context, *User) (*Response, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -87,16 +76,13 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) CreateAccount(context.Context, *User) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateAccount not implemented")
+func (UnimplementedUserServiceServer) Register(context.Context, *User) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
 }
-func (UnimplementedUserServiceServer) Login(context.Context, *User) (*Status, error) {
+func (UnimplementedUserServiceServer) Login(context.Context, *User) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
-func (UnimplementedUserServiceServer) Logout(context.Context, *User) (*Status, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
-}
-func (UnimplementedUserServiceServer) DeleteAccount(context.Context, *User) (*Status, error) {
+func (UnimplementedUserServiceServer) DeleteAccount(context.Context, *User) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteAccount not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
@@ -112,20 +98,20 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_CreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _UserService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(User)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).CreateAccount(ctx, in)
+		return srv.(UserServiceServer).Register(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/main.UserService/CreateAccount",
+		FullMethod: "/main.UserService/Register",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).CreateAccount(ctx, req.(*User))
+		return srv.(UserServiceServer).Register(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -144,24 +130,6 @@ func _UserService_Login_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserServiceServer).Login(ctx, req.(*User))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _UserService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(User)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(UserServiceServer).Logout(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/main.UserService/Logout",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).Logout(ctx, req.(*User))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,16 +160,12 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateAccount",
-			Handler:    _UserService_CreateAccount_Handler,
+			MethodName: "Register",
+			Handler:    _UserService_Register_Handler,
 		},
 		{
 			MethodName: "Login",
 			Handler:    _UserService_Login_Handler,
-		},
-		{
-			MethodName: "Logout",
-			Handler:    _UserService_Logout_Handler,
 		},
 		{
 			MethodName: "DeleteAccount",

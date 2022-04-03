@@ -4,6 +4,6 @@ Server:
 Client:
 	go run "/home/sabit/GoLang/Go-gRPC/client/."
 
-Gen:
+Pb:
 	protoc --go_out=.  protos/user.proto
 	protoc --go-grpc_out=.  protos/user.proto

@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Apr  2 02:44:45 2022
+# Make data base, printed on Sun Apr  3 11:50:17 2022
 
 # Variables
 
@@ -21,7 +21,7 @@ NO_AT_BRIDGE = 1
 # environment
 GTK_RC_FILES = /etc/gtk/gtkrc:/home/sabit/.gtkrc:/home/sabit/.config/gtkrc
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-2660e2c3-8f2a-444e-909a-307530652e4f.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-956674f4-8c67-4ae8-aac9-2134b502d854.sock
 # environment
 VSCODE_CWD = /home/sabit
 # environment
@@ -99,13 +99,13 @@ MAKEFILE_LIST := Makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 13151
+VSCODE_PID = 1382
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/ItsManjaro:@/tmp/.ICE-unix/1016,unix/ItsManjaro:/tmp/.ICE-unix/1016
+SESSION_MANAGER = local/ItsManjaro:@/tmp/.ICE-unix/1023,unix/ItsManjaro:/tmp/.ICE-unix/1023
 # automatic
 *F = $(notdir $*)
 # environment
@@ -163,9 +163,9 @@ LOGNAME = sabit
 # environment
 XDG_VTNR = 1
 # makefile
-.DEFAULT_GOAL := server
+.DEFAULT_GOAL := Server
 # environment
-SYSTEMD_EXEC_PID = 920
+SYSTEMD_EXEC_PID = 926
 # environment
 DISPLAY = :0
 # environment
@@ -239,7 +239,7 @@ DOTNET_ROOT = /usr/share/dotnet
 
 # Files
 
-client:
+Client:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -249,16 +249,10 @@ client:
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-04-02 02:43:36.649927161
+ 
+#  Last modified 2022-04-02 20:01:16.256598863
 #  File has been updated.
 #  Successfully updated.
-
-server:
-#  Implicit rule search has not been done.
-#  Modification time never checked.
-#  File has not been updated.
-#  recipe to execute (from 'Makefile', line 2):
-	go run "/home/sabit/GoLang/Go-gRPC/server/."
 
 # Not a target:
 .DEFAULT:
@@ -273,14 +267,20 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
-gen:
+Server:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 2):
+	go run "/home/sabit/GoLang/Go-gRPC/server/."
+
+Pb:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 8):
 	protoc --go_out=.  protos/user.proto
 	protoc --go-grpc_out=.  protos/user.proto
- 
 
 # files hash-table stats:
 # Load=7/1024=1%, Rehash=0, Collisions=0/17=0%
@@ -290,12 +290,12 @@ gen:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 16 / storage = 121 B / avg = 7 B
-# current buf: size = 8162 B / used = 121 B / count = 16 / avg = 7 B
+# strcache buffers: 1 (0) / strings = 19 / storage = 137 B / avg = 7 B
+# current buf: size = 8162 B / used = 137 B / count = 19 / avg = 7 B
 
-# strcache performance: lookups = 26 / hit rate = 38%
+# strcache performance: lookups = 26 / hit rate = 26%
 # hash-table stats:
-# Load=16/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Sat Apr  2 02:44:45 2022
+# Load=19/8192=0%, Rehash=0, Collisions=0/26=0%
+# Finished Make data base on Sun Apr  3 11:50:17 2022
 
  
